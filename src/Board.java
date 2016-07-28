@@ -5,6 +5,7 @@ public class Board{
 	int shotsFired;
 	int hitCount;
 	int shipsSunk;
+	String boardString;
 	public Board() {
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
@@ -14,12 +15,14 @@ public class Board{
 	}
 	
 	public void print(){
+		boardString = "<html>";
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				System.out.print(tiles[i][j].toString() + " ");
+				boardString += tiles[i][j].toString() + "  ";
 			}
-			System.out.println();
+			boardString += "<br>";
 		}
+		boardString += "</html>";
 	}
 	
 	public boolean okToPlaceShipAt(int r, int c, Ship s, boolean horizontal){
@@ -40,8 +43,8 @@ public class Board{
 		return true;
 	}
 	
-	public void placeShipAt(int r, int c, Ship s, boolean horizontal) throws Exception{
-		if (!okToPlaceShipAt(r, c, s, horizontal)){
+	public void placeShipAt(int c, int r, Ship s, boolean horizontal) throws Exception{
+		if (!okToPlaceShipAt(c, r, s, horizontal)){
 			throw new Exception("Not okay to place ship at");
 		}
 		if (horizontal) {
@@ -55,8 +58,8 @@ public class Board{
 				tiles[i][c] = s;
 			}
 		}
-		s.bowRow = r;
 		s.bowColumn = c;
+		s.bowRow = r;
 	}
 	
 	public void placeShipsRandomly(){
@@ -64,8 +67,8 @@ public class Board{
 		Random rand = new Random();
 		boolean h;
 		boolean hasPlaced = false;
-		int r;
 		int c;
+		int r;
 		
 		for (int i = 0; i < ships.length; i++) {
 			switch (i) {
@@ -87,13 +90,12 @@ public class Board{
 		}
 		
 		for (Ship ship : ships) {
-			System.out.println("x");
 			while (!hasPlaced) {
 				h = rand.nextBoolean();
-				r = rand.nextInt(10);
 				c = rand.nextInt(10);
+				r = rand.nextInt(10);
 				try {
-					placeShipAt(r, c, ship, h);
+					placeShipAt(c, r, ship, h);
 					hasPlaced = true;
 				} catch (Exception e) {
 				}
@@ -102,14 +104,16 @@ public class Board{
 		}
 	}
 	
-	public boolean shootAt(int r, int c){
+	public boolean shootAt(int c, int r){
 		shotsFired++;
 		if (tiles[r][c].isOccupied()) {
+			System.out.println("hit!");
 			hitCount++;
 			Ship s = (Ship) tiles[r][c];
-			s.shootAt(r, c);
+			s.shootAt(c, r);
 			return true;
 		}
+		System.out.println("not hit");
 		return false;
 	}
 }

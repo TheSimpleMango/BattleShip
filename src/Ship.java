@@ -1,10 +1,10 @@
 
 public abstract class Ship extends Tile{
-		int bowRow;
 		int bowColumn;
+		int bowRow;
 		int length;
 		boolean isHorizontal;
-		Boolean[] hits = new Boolean[length];
+		boolean[] hits;
 		
 		@Override 
 		public String toString(){
@@ -15,7 +15,7 @@ public abstract class Ship extends Tile{
 		}
 		
 		public boolean isSunk(){
-			for (Boolean b : hits) {
+			for (boolean b : hits) {
 				if (!b) {
 					return false;
 				}
@@ -23,7 +23,14 @@ public abstract class Ship extends Tile{
 			return true;
 		}
 		
-		public void shootAt(int r, int c){
-			
+		public void shootAt(int c, int r){
+			int distance;
+			if (isHorizontal) {
+				distance = c - bowColumn;
+			}
+			else {
+				distance = r - bowRow;
+			}
+			hits[distance] = true;
 		}
 }
