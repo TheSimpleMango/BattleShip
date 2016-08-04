@@ -2,6 +2,7 @@ import java.util.Random;
 
 public class Board{
 	Tile[][] tiles = new Tile[10][10];
+	boolean[][] shots = new boolean[10][10];
 	int shotsFired;
 	int hitCount;
 	int shipsSunk;
@@ -18,7 +19,12 @@ public class Board{
 		boardString = "<html>";
 		for (int i = 0; i < tiles.length; i++) {
 			for (int j = 0; j < tiles[0].length; j++) {
-				boardString += tiles[i][j].toString() + "  ";
+				if (shots[i][j]) {
+					boardString += tiles[i][j].toString() + "  ";
+				}
+				else {
+					boardString += "-  ";
+				}
 			}
 			boardString += "<br>";
 		}
@@ -106,6 +112,7 @@ public class Board{
 	
 	public boolean shootAt(int c, int r){
 		shotsFired++;
+		shots[r][c] = true;
 		if (tiles[r][c].isOccupied()) {
 			System.out.println("hit!");
 			hitCount++;

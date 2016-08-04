@@ -2,25 +2,35 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Game implements ActionListener {
 	JFrame f = new JFrame();
 	JPanel p = new JPanel();
+	JPanel p2 = new JPanel();
+	JPanel p3 = new JPanel();
+	JPanel p4 = new JPanel();
 	JLabel board = new JLabel();
 	JLabel xLabel = new JLabel("x: ");
 	JLabel yLabel = new JLabel("y: ");
 	JTextField xField = new JTextField(10);
 	JTextField yField = new JTextField(10);
 	JButton shootButton = new JButton("Shoot");
+	
+	JLabel winScreen = new JLabel("You Win!");
+	JButton rButton = new JButton("restart");
+	
 	int xInput;
 	int yInput;
 	Board b;
@@ -28,15 +38,24 @@ public class Game implements ActionListener {
 			b.placeShipsRandomly();
 			b.print();
 			
+			f.setLayout(new BorderLayout());
+			p.setLayout(new BorderLayout());
+			p2.setLayout(new BorderLayout());
+			//p2.setLayout(new GridLayout(3, 1));
+			
 			f.add(p);
 			f.setVisible(true);
 			f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
 			p.add(board, BorderLayout.WEST);
-			p.add(xLabel, BorderLayout.EAST);
-			p.add(xField, BorderLayout.EAST);
-			p.add(yLabel, BorderLayout.EAST);
-			p.add(yField, BorderLayout.EAST);
-			p.add(shootButton);
+			p.add(p2, BorderLayout.EAST);
+			p2.add(p3, BorderLayout.NORTH);
+			p2.add(p4, BorderLayout.CENTER);
+			p2.add(shootButton, BorderLayout.SOUTH);
+			
+			p3.add(xLabel, BorderLayout.NORTH);
+			p3.add(xField, BorderLayout.NORTH);
+			p4.add(yLabel, BorderLayout.CENTER);
+			p4.add(yField, BorderLayout.CENTER);
 			board.setText(b.boardString);
 			f.pack();
 			
@@ -64,5 +83,9 @@ public class Game implements ActionListener {
 		b.print();
 		board.setText(b.boardString);
 		f.pack();
+		if (b.shipsSunk >= 10) {
+			JOptionPane.showMessageDialog(null, "You win!");
+			Game g = new Game();
+		}
 	}
 }
